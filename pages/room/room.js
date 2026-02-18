@@ -30,6 +30,7 @@ Page({
     topInset: 28,
     showWarning: true,
     showQrPopup: false,
+    transferSubmitting: false,
     qrCodeUrl: '',
     roomId: '',
     roomCode: '----',
@@ -234,7 +235,51 @@ Page({
   onMemberTap(e) {
     const index = e.currentTarget.dataset.index
     const member = this.data.members[index]
-    if (!member || !member.self) {
+    if (!member || member.invite) {
+      return
+    }
+
+    if (!member.self) {
+      if (this.data.transferSubmitting) {
+        return
+      }
+
+      wx.showModal({
+        title: `向${member.name}转账`,
+        editable: true,
+        placeholderText: '请输入金额（如 12.5）',
+        success: (res) => {
+          if (!res.confirm) {
+            return
+          }
+
+          const amountTextValue = (res.content || '').trim()
+          if (!amountTextValue) {
+            wx.showToast({ title: '请输入金额', icon: 'none' })
+            return
+          }
+
+          const amount = Number(amountTextValue)
+          const validMoney = /^\d+(\.\d{1,2})?$/.test(amountTextValue)
+          if (!Number.isFinite(amount) || amount <= 0 || !validMoney) {
+            wx.showToast({ title: '金额格式不正确', icon: 'none' })
+            return
+          }
+
+          this.setData({ transferSubmitting: true })
+          api.createTransaction(this.data.roomId, member.userId, amount).then(function() {
+            wx.showToast({ title: '转账成功', icon: 'success' })
+            this.refreshRoomData()
+            this.setData({ transferSubmitting: false })
+          }.bind(this)).catch(function(err) {
+            wx.showToast({
+              title: err.message || '转账失败',
+              icon: 'none'
+            })
+            this.setData({ transferSubmitting: false })
+          })
+        }
+      })
       return
     }
 

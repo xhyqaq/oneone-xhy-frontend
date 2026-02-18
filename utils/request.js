@@ -43,6 +43,18 @@ function request(options) {
           console.log('==========================================')
           
           const body = res.data || {}
+          
+          if (res.statusCode === 401 || res.statusCode === 403) {
+            console.error('[Request] 认证失败，清除缓存')
+            wx.removeStorageSync('token')
+            wx.removeStorageSync('user')
+            const app = getApp()
+            app.globalData.token = ''
+            app.globalData.user = null
+            reject(new Error('登录已过期，请重新登录'))
+            return
+          }
+          
           if (res.statusCode >= 400) {
             console.error('[Request] HTTP错误:', res.statusCode)
             reject(new Error(body.message || `HTTP ${res.statusCode}`))
@@ -53,6 +65,18 @@ function request(options) {
             reject(new Error('响应格式错误'))
             return
           }
+          
+          if (body.code === 1002 || body.code === 1003) {
+            console.error('[Request] Token无效，清除缓存')
+            wx.removeStorageSync('token')
+            wx.removeStorageSync('user')
+            const app = getApp()
+            app.globalData.token = ''
+            app.globalData.user = null
+            reject(new Error(body.message || 'Token无效'))
+            return
+          }
+          
           if (body.code !== 0) {
             console.error('[Request] 业务错误:', body.code, body.message)
             reject(new Error(body.message || '请求失败'))

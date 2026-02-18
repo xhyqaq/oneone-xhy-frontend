@@ -27,6 +27,14 @@ function getTransactions(roomId, page = 1, limit = 20) {
   })
 }
 
+function createTransaction(roomId, payeeId, amount) {
+  return request({
+    url: '/transactions',
+    method: 'POST',
+    data: { roomId, payeeId, amount }
+  })
+}
+
 function getSettlement(roomId) {
   return request({
     url: `/settlements/${roomId}`
@@ -78,6 +86,7 @@ module.exports = {
   joinRoom,
   getRoom,
   getTransactions,
+  createTransaction,
   getSettlement,
   createSettlement,
   getHistoryRooms,
