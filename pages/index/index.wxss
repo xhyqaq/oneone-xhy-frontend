@@ -31,6 +31,16 @@
   font-size: 30rpx;
 }
 
+.hero-warning {
+  margin-top: 12rpx;
+  padding: 12rpx 16rpx;
+  background: #fff3e0;
+  border-radius: 8rpx;
+  color: #e65100;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
 .action-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -244,4 +254,100 @@
 .nav-item.active {
   color: #05904d;
   font-weight: 600;
+}
+
+.join-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.join-dialog {
+  width: 600rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 40rpx 32rpx 32rpx;
+}
+
+.join-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.join-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.method-btn {
+  height: 100rpx;
+  border-radius: 16rpx;
+  background: #05904d;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+}
+
+.method-icon {
+  font-size: 40rpx;
+}
+
+.method-text {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.method-divider {
+  text-align: center;
+  color: #999999;
+  font-size: 28rpx;
+  margin: 8rpx 0;
+}
+
+.method-input-wrap {
+  display: flex;
+  gap: 12rpx;
+  align-items: center;
+}
+
+.method-input {
+  flex: 1;
+  height: 88rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 16rpx;
+  padding: 0 20rpx;
+  font-size: 32rpx;
+}
+
+.method-join-btn {
+  width: 140rpx;
+  height: 88rpx;
+  background: #05904d;
+  color: #ffffff;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.join-close {
+  margin-top: 24rpx;
+  text-align: center;
+  color: #666666;
+  font-size: 30rpx;
+  padding: 16rpx 0;
 }

@@ -1,6 +1,6 @@
 {
   "compileType": "miniprogram",
-  "libVersion": "trial",
+  "libVersion": "3.14.2",
   "packOptions": {
     "ignore": [],
     "include": []
@@ -8,16 +8,19 @@
   "setting": {
     "coverView": true,
     "es6": true,
+    "enhance": true,
     "postcss": true,
     "minified": true,
-    "enhance": true,
     "showShadowRootInWxmlPanel": true,
     "packNpmRelationList": [],
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
-    }
+    },
+    "compileWorklet": false,
+    "es7": true,
+    "minifyWXML": true
   },
   "condition": {},
   "editorSetting": {

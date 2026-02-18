@@ -8,10 +8,7 @@
           <view class="title">{{roomCode}} 房间</view>
           <view class="sub">{{memberCount}}位成员</view>
         </view>
-        <view class="actions">
-          <view class="icon" bindtap="openRoomQr">▦</view>
-          <view class="icon" bindtap="onShareRoom">⤴</view>
-        </view>
+        <view class="actions"></view>
       </view>
 
       <view class="my-balance">
@@ -23,10 +20,16 @@
       </view>
     </view>
 
+    <view class="warning-banner">
+      <view class="warning-icon">🔊</view>
+      <view class="warning-text">"打牌记账" 不涉及金钱，禁止用于违法行为</view>
+      <view class="warning-close" bindtap="closeWarning" wx:if="{{showWarning}}">✕</view>
+    </view>
+
     <view class="note">点击好友头像即可向TA付款</view>
 
     <view class="member-grid">
-      <view class="member-card card" wx:for="{{members}}" wx:key="index" bindtap="onMemberTap" data-index="{{index}}">
+      <view class="member-card card" wx:for="{{members}}" wx:key="index" bindtap="{{item.invite ? 'showInviteDialog' : 'onMemberTap'}}" data-index="{{index}}">
         <block wx:if="{{!item.invite}}">
           <view class="avatar" style="background: {{item.color}};">{{item.short}}</view>
           <view class="self-tag" wx:if="{{item.self}}">我</view>
@@ -64,12 +67,14 @@
 
   <view class="qr-mask" wx:if="{{showQrPopup}}" bindtap="closeRoomQr">
     <view class="qr-dialog" catchtap="onQrDialogTap">
-      <view class="qr-title">房间二维码</view>
-      <view class="qr-sub">扫码加入 {{roomCode}} 房间</view>
+      <view class="qr-title">邀请好友</view>
+      <view class="qr-sub">扫码或转发加入 {{roomCode}} 房间</view>
       <view class="qr-board">
-        <view class="qr-fake"></view>
+        <image wx:if="{{qrCodeUrl}}" class="qr-image" src="{{qrCodeUrl}}" mode="aspectFit"></image>
+        <view wx:else class="qr-loading">加载中...</view>
       </view>
-      <view class="qr-tip">长按识别或截图发给好友</view>
+      <view class="qr-tip">长按识别二维码</view>
+      <button class="share-btn" open-type="share">转发给好友</button>
       <view class="qr-close" bindtap="closeRoomQr">关闭</view>
     </view>
   </view>

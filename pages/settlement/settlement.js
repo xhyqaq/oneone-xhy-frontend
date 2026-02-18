@@ -32,13 +32,12 @@ Page({
     this.loadSettlement()
   },
 
-  async loadSettlement() {
+  loadSettlement() {
     const roomId = this.data.roomId
     if (!roomId) {
       return
     }
-    try {
-      const data = await api.getSettlement(roomId)
+    api.getSettlement(roomId).then(function(data) {
       const members = data.members || []
       const positiveTotal = members
         .filter((item) => Number(item.balance) > 0)
@@ -69,24 +68,23 @@ Page({
         ],
         ranking
       })
-    } catch (err) {
+    }.bind(this)).catch(function(err) {
       wx.showToast({
         title: err.message || '加载结算失败',
         icon: 'none'
       })
-    }
+    })
   },
 
   goBack() {
     wx.navigateBack()
   },
 
-  async finalSettlement() {
+  finalSettlement() {
     if (!this.data.roomId) {
       return
     }
-    try {
-      await api.createSettlement(this.data.roomId)
+    api.createSettlement(this.data.roomId).then(function() {
       wx.showToast({
         title: '结算成功',
         icon: 'success'
@@ -96,11 +94,11 @@ Page({
           url: '/pages/history/history'
         })
       }, 600)
-    } catch (err) {
+    }).catch(function(err) {
       wx.showToast({
         title: err.message || '结算失败',
         icon: 'none'
       })
-    }
+    })
   }
 })

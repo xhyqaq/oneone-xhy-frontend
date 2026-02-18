@@ -6,6 +6,7 @@
     <view class="hero">
       <view class="hero-title">打牌记账</view>
       <view class="hero-desc">点击头像即可转账，轻松记录每一局</view>
+      <view class="hero-warning">⚠️ 本应用不涉及金钱，禁止用于违法行为</view>
     </view>
 
     <view class="action-grid">
@@ -14,16 +15,11 @@
         <view class="action-title">我要开房</view>
         <view class="action-sub">创建新的记账房间</view>
       </view>
-      <view class="action-card join" bindtap="showJoinInputBar">
+      <view class="action-card join" bindtap="showJoinDialog">
         <view class="action-icon light">⌁</view>
         <view class="action-title dark">加入房间</view>
         <view class="action-sub">扫码或输入房号</view>
       </view>
-    </view>
-
-    <view class="join-bar card" wx:if="{{showJoinInput}}">
-      <input class="room-input" placeholder="# 输入4位房间号" maxlength="4" value="{{roomCode}}" bindinput="onRoomCodeInput" />
-      <view class="join-btn" bindtap="joinByCode">加入</view>
     </view>
 
     <view class="tips card">
@@ -64,6 +60,24 @@
     <view class="nav-item" bindtap="goProfile">
       <view class="nav-icon">◌</view>
       <view class="nav-text">我的</view>
+    </view>
+  </view>
+
+  <view class="join-mask" wx:if="{{showJoinDialog}}" bindtap="closeJoinDialog">
+    <view class="join-dialog" catchtap="onJoinDialogTap">
+      <view class="join-title">加入房间</view>
+      <view class="join-methods">
+        <view class="method-btn scan" bindtap="scanQRCode">
+          <view class="method-icon">📷</view>
+          <view class="method-text">扫码加入</view>
+        </view>
+        <view class="method-divider">或</view>
+        <view class="method-input-wrap">
+          <input class="method-input" placeholder="输入4位房间号" maxlength="4" value="{{roomCode}}" bindinput="onRoomCodeInput" />
+          <view class="method-join-btn" bindtap="joinByCode">加入</view>
+        </view>
+      </view>
+      <view class="join-close" bindtap="closeJoinDialog">取消</view>
     </view>
   </view>
 </view>

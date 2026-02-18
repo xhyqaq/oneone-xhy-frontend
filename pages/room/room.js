@@ -28,7 +28,9 @@ function formatTimeText(iso) {
 Page({
   data: {
     topInset: 28,
+    showWarning: true,
     showQrPopup: false,
+    qrCodeUrl: '',
     roomId: '',
     roomCode: '----',
     memberCount: 0,
@@ -75,62 +77,86 @@ Page({
     }
   },
 
-  async refreshRoomData() {
+  refreshRoomData() {
     const roomId = this.data.roomId
     if (!roomId) {
       return
     }
-    try {
-      const [roomData, transData] = await Promise.all([
-        api.getRoom(roomId),
-        api.getTransactions(roomId, 1, 20)
-      ])
-      const app = getApp()
-      const myUserId = app.globalData.user ? app.globalData.user.userId : ''
+    
+    let roomData = null
+    let transData = null
+    let completed = 0
+    let hasError = false
 
-      const members = (roomData.members || []).map((item, index) => {
-        const isSelf = item.userId === myUserId
-        return {
-          userId: item.userId,
-          short: (item.nickname || '?').slice(0, 1),
-          name: item.nickname || '未命名',
-          amount: amountText(item.balance),
-          cls: amountClass(item.balance),
-          color: COLORS[index % COLORS.length],
-          self: isSelf
+    const handleComplete = () => {
+      completed++
+      if (completed === 2 && !hasError) {
+        const app = getApp()
+        const myUserId = app.globalData.user ? app.globalData.user.userId : ''
+
+        const members = (roomData.members || []).map((item, index) => {
+          const isSelf = item.userId === myUserId
+          return {
+            userId: item.userId,
+            short: (item.nickname || '?').slice(0, 1),
+            name: item.nickname || '未命名',
+            amount: amountText(item.balance),
+            cls: amountClass(item.balance),
+            color: COLORS[index % COLORS.length],
+            self: isSelf
+          }
+        })
+
+        if (members.length < 8) {
+          members.push({ invite: true })
         }
-      })
 
-      if (members.length < 8) {
-        members.push({ invite: true })
+        const me = (roomData.members || []).find((item) => item.userId === myUserId)
+        const records = (transData.transactions || []).slice(0, 8).map((item) => ({
+          from: item.payerName,
+          fromShort: (item.payerName || '?').slice(0, 1),
+          fromColor: '#4c8ed1',
+          to: item.payeeName,
+          toShort: (item.payeeName || '?').slice(0, 1),
+          toColor: '#05904d',
+          amount: amountText(item.amount),
+          time: formatTimeText(item.createdAt)
+        }))
+
+        this.setData({
+          roomCode: roomData.roomCode || this.data.roomCode,
+          memberCount: (roomData.members || []).length,
+          myBalance: amountText(me ? me.balance : 0),
+          myBalanceCls: amountClass(me ? me.balance : 0),
+          members,
+          records
+        })
       }
-
-      const me = (roomData.members || []).find((item) => item.userId === myUserId)
-      const records = (transData.transactions || []).slice(0, 8).map((item) => ({
-        from: item.payerName,
-        fromShort: (item.payerName || '?').slice(0, 1),
-        fromColor: '#4c8ed1',
-        to: item.payeeName,
-        toShort: (item.payeeName || '?').slice(0, 1),
-        toColor: '#05904d',
-        amount: amountText(item.amount),
-        time: formatTimeText(item.createdAt)
-      }))
-
-      this.setData({
-        roomCode: roomData.roomCode || this.data.roomCode,
-        memberCount: (roomData.members || []).length,
-        myBalance: amountText(me ? me.balance : 0),
-        myBalanceCls: amountClass(me ? me.balance : 0),
-        members,
-        records
-      })
-    } catch (err) {
-      wx.showToast({
-        title: err.message || '房间数据加载失败',
-        icon: 'none'
-      })
     }
+
+    const handleError = (err) => {
+      if (!hasError) {
+        hasError = true
+        wx.showToast({
+          title: err.message || '房间数据加载失败',
+          icon: 'none'
+        })
+      }
+    }
+
+    api.getRoom(roomId).then(function(data) {
+      roomData = data
+      handleComplete()
+    }).catch(function(err) {
+      handleError(err)
+    })
+
+    api.getTransactions(roomId, 1, 20).then(function(data) {
+      transData = data
+      handleComplete()
+    }).catch(function(err) {
+      handleError(err)
+    })
   },
 
   goBack() {
@@ -147,9 +173,39 @@ Page({
     })
   },
 
-  openRoomQr() {
+  showInviteDialog() {
+    const app = getApp()
+    const token = app.globalData.token || ''
+    const url = `${app.globalData.baseUrl}/rooms/${this.data.roomId}/qrcode`
+
     this.setData({
-      showQrPopup: true
+      showQrPopup: true,
+      qrCodeUrl: ''
+    })
+
+    wx.downloadFile({
+      url: url,
+      header: {
+        Authorization: `Bearer ${token}`
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          this.setData({
+            qrCodeUrl: res.tempFilePath
+          })
+        } else {
+          wx.showToast({
+            title: '加载二维码失败',
+            icon: 'none'
+          })
+        }
+      },
+      fail: () => {
+        wx.showToast({
+          title: '加载二维码失败',
+          icon: 'none'
+        })
+      }
     })
   },
 
@@ -159,16 +215,23 @@ Page({
     })
   },
 
-  onShareRoom() {
-    wx.showToast({
-      title: '分享功能暂未实现',
-      icon: 'none'
+  onShareAppMessage() {
+    return {
+      title: `加入 ${this.data.roomCode} 房间一起记账`,
+      path: `/pages/room/room?roomId=${this.data.roomId}&roomCode=${this.data.roomCode}`,
+      imageUrl: ''
+    }
+  },
+
+  closeWarning() {
+    this.setData({
+      showWarning: false
     })
   },
 
   onQrDialogTap() {},
 
-  async onMemberTap(e) {
+  onMemberTap(e) {
     const index = e.currentTarget.dataset.index
     const member = this.data.members[index]
     if (!member || !member.self) {
@@ -179,7 +242,7 @@ Page({
       title: '修改名称',
       editable: true,
       placeholderText: member.name,
-      success: async (res) => {
+      success: (res) => {
         if (!res.confirm) {
           return
         }
@@ -188,8 +251,7 @@ Page({
           wx.showToast({ title: '名称不能为空', icon: 'none' })
           return
         }
-        try {
-          await api.updateNickname(nextName)
+        api.updateNickname(nextName).then(function() {
           const app = getApp()
           const currentUser = app.globalData.user || {}
           const nextUser = { ...currentUser, nickname: nextName }
@@ -199,12 +261,12 @@ Page({
             [`members[${index}].name`]: nextName,
             [`members[${index}].short`]: nextName.slice(0, 1)
           })
-        } catch (err) {
+        }.bind(this)).catch(function(err) {
           wx.showToast({
             title: err.message || '修改失败',
             icon: 'none'
           })
-        }
+        })
       }
     })
   }

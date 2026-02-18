@@ -58,10 +58,28 @@ Page({
     this.fetchHistoryRooms()
   },
 
-  async fetchHistoryRooms() {
-    try {
-      const data = await api.getHistoryRooms(1, 30)
+  fetchHistoryRooms() {
+    console.log('[历史记录] 开始获取历史房间列表')
+    
+    // 检查登录状态
+    const app = getApp()
+    console.log('[历史记录] 当前用户:', app.globalData.user)
+    console.log('[历史记录] 当前token:', app.globalData.token ? '已有token' : '无token')
+    
+    api.getHistoryRooms(1, 30).then(function(data) {
+      console.log('[历史记录] API返回数据:', data)
+      
       const rawRooms = data.rooms || []
+      console.log('[历史记录] 房间数量:', rawRooms.length)
+      
+      if (rawRooms.length === 0) {
+        console.log('[历史记录] 没有历史房间')
+        wx.showToast({
+          title: '暂无历史记录',
+          icon: 'none'
+        })
+      }
+      
       const rooms = rawRooms.map((item) => ({
         roomId: item.roomId,
         id: item.roomCode,
@@ -87,15 +105,23 @@ Page({
         totalLoss: `-${lossAbs.toFixed(2)}`,
         netProfit: `${net.toFixed(2)}`
       })
-    } catch (err) {
+      console.log('[历史记录] 数据设置成功')
+    }.bind(this)).catch(function(err) {
+      console.error('[历史记录] 获取失败:', err)
+      console.error('[历史记录] 错误详情:', {
+        message: err.message,
+        stack: err.stack
+      })
+      
       wx.showToast({
         title: err.message || '历史记录加载失败',
-        icon: 'none'
+        icon: 'none',
+        duration: 3000
       })
       this.setData({
         rooms: []
       })
-    }
+    }.bind(this))
   },
 
   goBack() {

@@ -7,11 +7,17 @@ function formatAmount(value) {
 }
 
 function toRecentRoom(item) {
+  const dateStr = item.endedAt || item.createdAt || ''
+  let formattedDate = ''
+  if (dateStr) {
+    formattedDate = dateStr.slice(0, 10).replace(/-/g, '/')
+  }
+  
   return {
     id: item.roomCode,
     roomId: item.roomId,
     members: item.memberCount,
-    date: (item.endedAt || item.createdAt || '').slice(5, 10).replace('-', '/'),
+    date: formattedDate,
     rounds: item.transactionCount,
     amount: formatAmount(item.myBalance),
     cls: Number(item.myBalance) >= 0 ? 'positive' : 'negative'
@@ -21,7 +27,7 @@ function toRecentRoom(item) {
 Page({
   data: {
     topInset: 28,
-    showJoinInput: false,
+    showJoinDialog: false,
     roomCode: '',
     creatingRoom: false,
     joiningRoom: false,
@@ -40,38 +46,36 @@ Page({
     this.fetchRecentRooms()
   },
 
-  async fetchRecentRooms() {
-    try {
-      const data = await api.getHistoryRooms(1, 5)
+  fetchRecentRooms() {
+    api.getHistoryRooms(1, 5).then(function(data) {
       const rooms = (data.rooms || []).map(toRecentRoom)
       this.setData({
         recentRooms: rooms
       })
-    } catch (err) {
+    }.bind(this)).catch(function(err) {
       this.setData({
         recentRooms: []
       })
-    }
+    }.bind(this))
   },
 
-  async goRoom() {
+  goRoom() {
     if (this.data.creatingRoom) {
       return
     }
     this.setData({ creatingRoom: true })
-    try {
-      const data = await api.createRoom()
+    api.createRoom().then(function(data) {
       wx.navigateTo({
         url: `/pages/room/room?roomId=${encodeURIComponent(data.roomId)}&roomCode=${encodeURIComponent(data.roomCode)}`
       })
-    } catch (err) {
+      this.setData({ creatingRoom: false })
+    }.bind(this)).catch(function(err) {
       wx.showToast({
         title: err.message || '创建房间失败',
         icon: 'none'
       })
-    } finally {
       this.setData({ creatingRoom: false })
-    }
+    }.bind(this))
   },
 
   goHistory() {
@@ -97,6 +101,55 @@ Page({
     })
   },
 
+  showJoinDialog() {
+    this.setData({
+      showJoinDialog: true,
+      roomCode: ''
+    })
+  },
+
+  closeJoinDialog() {
+    this.setData({
+      showJoinDialog: false,
+      roomCode: ''
+    })
+  },
+
+  onJoinDialogTap() {},
+
+  scanQRCode() {
+    wx.scanCode({
+      onlyFromCamera: true,
+      scanType: ['qrCode'],
+      success: (res) => {
+        if (res.result) {
+          const scene = res.result
+          const parts = scene.split('_')
+          if (parts.length === 2) {
+            const roomId = parts[0]
+            const roomCode = parts[1]
+            wx.navigateTo({
+              url: `/pages/room/room?roomId=${encodeURIComponent(roomId)}&roomCode=${encodeURIComponent(roomCode)}`
+            })
+          } else {
+            wx.showToast({
+              title: '无效的二维码',
+              icon: 'none'
+            })
+          }
+        }
+      },
+      fail: (err) => {
+        if (err.errMsg && err.errMsg.indexOf('cancel') === -1) {
+          wx.showToast({
+            title: '扫码失败',
+            icon: 'none'
+          })
+        }
+      }
+    })
+  },
+
   showJoinInputBar() {
     this.setData({
       showJoinInput: true
@@ -109,7 +162,7 @@ Page({
     })
   },
 
-  async joinByCode() {
+  joinByCode() {
     if (this.data.joiningRoom) {
       return
     }
@@ -123,18 +176,17 @@ Page({
     }
 
     this.setData({ joiningRoom: true })
-    try {
-      const data = await api.joinRoom(code)
+    api.joinRoom(code).then(function(data) {
       wx.navigateTo({
         url: `/pages/room/room?roomId=${encodeURIComponent(data.roomId)}&roomCode=${encodeURIComponent(data.roomCode || code)}`
       })
-    } catch (err) {
+      this.setData({ joiningRoom: false })
+    }.bind(this)).catch(function(err) {
       wx.showToast({
         title: err.message || '加入房间失败',
         icon: 'none'
       })
-    } finally {
       this.setData({ joiningRoom: false })
-    }
+    }.bind(this))
   }
 })

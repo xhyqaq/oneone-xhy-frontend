@@ -68,6 +68,11 @@ function updateProfile(nickname, avatarUrl) {
   })
 }
 
+function getRoomQRCode(roomId) {
+  const app = getApp()
+  return `${app.globalData.baseUrl}/rooms/${roomId}/qrcode`
+}
+
 module.exports = {
   createRoom,
   joinRoom,
@@ -78,5 +83,6 @@ module.exports = {
   getHistoryRooms,
   getHistoryRoomTransactions,
   updateNickname,
-  updateProfile
+  updateProfile,
+  getRoomQRCode
 }

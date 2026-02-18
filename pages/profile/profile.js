@@ -45,23 +45,19 @@ Page({
     })
   },
 
-  async openProfileActions() {
+  openProfileActions() {
     const itemList = ['修改昵称']
-    try {
-      const res = await new Promise((resolve, reject) => {
-        wx.showActionSheet({
-          itemList,
-          success: resolve,
-          fail: reject
-        })
-      })
-
-      if (res.tapIndex === 0) {
-        this.editNickname()
+    wx.showActionSheet({
+      itemList,
+      success: (res) => {
+        if (res.tapIndex === 0) {
+          this.editNickname()
+        }
+      },
+      fail: () => {
+        return
       }
-    } catch (err) {
-      return
-    }
+    })
   },
 
   editNickname() {
@@ -69,7 +65,7 @@ Page({
       title: '修改昵称',
       editable: true,
       placeholderText: this.data.nickname,
-      success: async (res) => {
+      success: (res) => {
         if (!res.confirm) {
           return
         }
@@ -81,8 +77,7 @@ Page({
           })
           return
         }
-        try {
-          await api.updateNickname(nextName)
+        api.updateNickname(nextName).then(() => {
           const app = getApp()
           const nextUser = {
             ...(app.globalData.user || {}),
@@ -94,20 +89,22 @@ Page({
             nickname: nextName,
             avatarText: nextName.slice(0, 1)
           })
-        } catch (err) {
+        }).catch((err) => {
           wx.showToast({
             title: err.message || '修改失败',
             icon: 'none'
           })
-        }
+        })
       }
     })
   },
 
-  async fetchProfileStats() {
-    try {
-      const data = await api.getHistoryRooms(1, 100)
+  fetchProfileStats() {
+    console.log('[Profile] 开始获取个人统计数据')
+    api.getHistoryRooms(1, 100).then((data) => {
+      console.log('[Profile] API返回数据:', data)
       const rooms = data.rooms || []
+      console.log('[Profile] 房间数量:', rooms.length)
       const totalRounds = rooms.reduce((sum, item) => sum + Number(item.transactionCount || 0), 0)
       const totalWinNum = rooms.filter((item) => Number(item.myBalance) > 0).reduce((sum, item) => sum + Number(item.myBalance || 0), 0)
       const totalLossAbs = rooms.filter((item) => Number(item.myBalance) < 0).reduce((sum, item) => sum + Math.abs(Number(item.myBalance || 0)), 0)
@@ -128,12 +125,20 @@ Page({
         winPercent,
         losePercent: 100 - winPercent
       })
-    } catch (err) {
+      console.log('[Profile] 统计数据设置成功')
+    }).catch((err) => {
+      console.error('[Profile] 获取统计数据失败:', err)
+      console.error('[Profile] 错误详情:', {
+        message: err.message,
+        stack: err.stack
+      })
+      
       wx.showToast({
         title: err.message || '个人数据加载失败',
-        icon: 'none'
+        icon: 'none',
+        duration: 3000
       })
-    }
+    })
   },
 
   goHome() {
