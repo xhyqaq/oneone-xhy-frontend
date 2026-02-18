@@ -1,0 +1,69 @@
+<view class="screen home-screen">
+  <scroll-view class="home-scroll" scroll-y="true" show-scrollbar="false">
+    <view style="height: {{topInset}}px;"></view>
+    <view class="top-grab"></view>
+
+    <view class="hero">
+      <view class="hero-title">打牌记账</view>
+      <view class="hero-desc">点击头像即可转账，轻松记录每一局</view>
+    </view>
+
+    <view class="action-grid">
+      <view class="action-card create shadow-soft" bindtap="goRoom">
+        <view class="action-icon">+</view>
+        <view class="action-title">我要开房</view>
+        <view class="action-sub">创建新的记账房间</view>
+      </view>
+      <view class="action-card join" bindtap="showJoinInputBar">
+        <view class="action-icon light">⌁</view>
+        <view class="action-title dark">加入房间</view>
+        <view class="action-sub">扫码或输入房号</view>
+      </view>
+    </view>
+
+    <view class="join-bar card" wx:if="{{showJoinInput}}">
+      <input class="room-input" placeholder="# 输入4位房间号" maxlength="4" value="{{roomCode}}" bindinput="onRoomCodeInput" />
+      <view class="join-btn" bindtap="joinByCode">加入</view>
+    </view>
+
+    <view class="tips card">
+      <view class="tips-header">
+        <view class="tips-tag">Tips</view>
+        <view class="tips-title">使用小贴士</view>
+      </view>
+      <view class="tips-item">1. 创建房间后分享二维码给好友</view>
+      <view class="tips-item">2. 点击好友头像即可快速支付</view>
+      <view class="tips-item">3. 所有人余额实时同步更新</view>
+      <view class="tips-item">4. 散场后一键查看结算结果</view>
+    </view>
+
+    <view class="recent-title-row">
+      <view class="recent-title">最近房间</view>
+      <view class="recent-more" bindtap="goHistory">查看全部 ></view>
+    </view>
+
+    <view class="recent-list">
+      <view class="recent-card card" wx:for="{{recentRooms}}" wx:key="id" bindtap="goRoomFromRecent">
+        <view class="room-badge">#</view>
+        <view class="room-info">
+          <view class="room-name">{{item.id}} 房间 <text class="muted">👥{{item.members}}人</text></view>
+          <view class="room-meta">{{item.date}}　{{item.rounds}}笔</view>
+        </view>
+        <view class="room-amount {{item.cls}}">{{item.amount}}</view>
+      </view>
+    </view>
+
+    <view class="bottom-placeholder"></view>
+  </scroll-view>
+
+  <view class="bottom-nav">
+    <view class="nav-item active">
+      <view class="nav-icon">¤</view>
+      <view class="nav-text">记账</view>
+    </view>
+    <view class="nav-item" bindtap="goProfile">
+      <view class="nav-icon">◌</view>
+      <view class="nav-text">我的</view>
+    </view>
+  </view>
+</view>

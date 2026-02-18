@@ -1,0 +1,76 @@
+<view class="screen room-screen">
+  <scroll-view class="room-scroll" scroll-y="true" show-scrollbar="false">
+    <view class="room-header">
+      <view style="height: {{topInset}}px;"></view>
+      <view class="header-row">
+        <view class="back" bindtap="goBack">&lt; 返回</view>
+        <view class="title-wrap">
+          <view class="title">7vcf 房间</view>
+          <view class="sub">5位成员</view>
+        </view>
+        <view class="actions">
+          <view class="icon" bindtap="openRoomQr">▦</view>
+          <view class="icon" bindtap="onShareRoom">⤴</view>
+        </view>
+      </view>
+
+      <view class="my-balance">
+        <view>
+          <view class="small">我的余额</view>
+          <view class="amount">+150.00<text class="yuan">元</text></view>
+        </view>
+        <view class="settle-btn" bindtap="goSettlement">结算</view>
+      </view>
+    </view>
+
+    <view class="note">点击好友头像即可向TA付款</view>
+
+    <view class="member-grid">
+      <view class="member-card card" wx:for="{{members}}" wx:key="index" bindtap="onMemberTap" data-index="{{index}}">
+        <block wx:if="{{!item.invite}}">
+          <view class="avatar" style="background: {{item.color}};">{{item.short}}</view>
+          <view class="self-tag" wx:if="{{item.self}}">我</view>
+          <view class="member-name">{{item.name}}</view>
+          <view class="member-amount {{item.cls}}">{{item.amount}}</view>
+        </block>
+        <block wx:else>
+          <view class="invite-avatar">⊕</view>
+          <view class="invite-text">邀请好友</view>
+        </block>
+      </view>
+    </view>
+
+    <view class="section-head">
+      <view class="section-title">流水记录</view>
+      <view class="section-count">共 8 笔</view>
+    </view>
+
+    <view class="record-list">
+      <view class="record-item card" wx:for="{{records}}" wx:key="time">
+        <view class="record-left">
+          <view class="mini-avatar" style="background: {{item.fromColor}};">{{item.fromShort}}</view>
+          <view class="record-name">{{item.from}}</view>
+          <view class="arrow">→</view>
+          <view class="mini-avatar" style="background: {{item.toColor}};">{{item.toShort}}</view>
+          <view class="record-name positive">{{item.to}}</view>
+        </view>
+        <view class="record-right">
+          <view class="negative">{{item.amount}}</view>
+          <view class="muted">{{item.time}}</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="qr-mask" wx:if="{{showQrPopup}}" bindtap="closeRoomQr">
+    <view class="qr-dialog" catchtap="onQrDialogTap">
+      <view class="qr-title">房间二维码</view>
+      <view class="qr-sub">扫码加入 {{roomId}} 房间</view>
+      <view class="qr-board">
+        <view class="qr-fake"></view>
+      </view>
+      <view class="qr-tip">长按识别或截图发给好友</view>
+      <view class="qr-close" bindtap="closeRoomQr">关闭</view>
+    </view>
+  </view>
+</view>

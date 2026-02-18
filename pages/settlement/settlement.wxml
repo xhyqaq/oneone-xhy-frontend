@@ -1,0 +1,41 @@
+<view class="screen settlement-screen">
+  <scroll-view class="settlement-scroll" scroll-y="true" show-scrollbar="false">
+    <view class="top-green">
+      <view style="height: {{topInset}}px;"></view>
+      <view class="head-row">
+        <view class="back" bindtap="goBack">&lt; 返回</view>
+        <view class="title">结算</view>
+        <view class="space"></view>
+      </view>
+
+      <view class="summary-grid">
+        <view class="summary-item" wx:for="{{summary}}" wx:key="label">
+          <view class="s-label">{{item.label}}</view>
+          <view class="s-value">{{item.value}}</view>
+          <view class="s-unit">{{item.unit}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-title">结算结果</view>
+    <view class="ranking-list">
+      <view class="rank-card card" wx:for="{{ranking}}" wx:key="rank">
+        <view class="rank-top">
+          <view class="rank-left">
+            <view class="rank-index">{{item.rank}}</view>
+            <view class="rank-avatar">{{item.short}}</view>
+            <view class="rank-name">{{item.name}}</view>
+          </view>
+          <view class="rank-amount {{item.cls}}">{{item.amount}}</view>
+        </view>
+        <view class="bar-bg">
+          <view class="bar-fill {{item.cls}}" style="width: {{item.width}};"></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-space"></view>
+  </scroll-view>
+
+  <view class="footer-btn">最终结算（结束并解散房间）</view>
+</view>

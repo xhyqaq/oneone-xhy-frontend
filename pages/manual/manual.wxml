@@ -1,0 +1,71 @@
+<view class="screen manual-screen">
+  <scroll-view class="manual-scroll" scroll-y="true" show-scrollbar="false">
+    <view class="green-head">
+      <view style="height: {{topInset}}px;"></view>
+      <view class="row">
+        <view class="back" bindtap="goBack">&lt; 返回</view>
+        <view class="title">使用手册</view>
+        <view class="space"></view>
+      </view>
+    </view>
+
+    <view class="section-title">使用步骤</view>
+    <view class="step-list">
+      <view class="step-card card">
+        <view class="step-head">
+          <view class="icon icon-green">◌</view>
+          <view class="step-title">创建或加入房间</view>
+        </view>
+        <view class="step-desc">点击"我要开房"创建新房间，或扫描好友分享的二维码加入已有房间。每个房间最多8人。</view>
+        <view class="step-no">1</view>
+      </view>
+
+      <view class="step-card card">
+        <view class="step-head">
+          <view class="icon icon-orange">✧</view>
+          <view class="step-title">点击头像转账</view>
+        </view>
+        <view class="step-desc">在房间页面，点击好友的头像即可向TA付款。使用数字键盘输入金额，确认后自动完成转账。</view>
+        <view class="step-no">2</view>
+      </view>
+
+      <view class="step-card card">
+        <view class="step-head">
+          <view class="icon icon-blue">↔</view>
+          <view class="step-title">实时同步余额</view>
+        </view>
+        <view class="step-desc">所有成员的余额和流水记录实时同步更新，每个人都能看到最新的数据。支持负数余额。</view>
+        <view class="step-no">3</view>
+      </view>
+
+      <view class="step-card card">
+        <view class="step-head">
+          <view class="icon icon-purple">⌂</view>
+          <view class="step-title">查看结算</view>
+        </view>
+        <view class="step-desc">点击"结算"按钮查看每个人的最终余额。正数代表赢钱，负数代表输钱。散场后再结算即可。</view>
+        <view class="step-no">4</view>
+      </view>
+    </view>
+
+    <view class="section-title">常见问题</view>
+    <view class="faq-list">
+      <view class="faq card">
+        <view class="q">可以在多个房间同时记账吗？</view>
+        <view class="a">目前每个用户同时只能在一个进行中的房间。需要先退出当前房间才能加入新房间。</view>
+      </view>
+      <view class="faq card">
+        <view class="q">退出房间后余额会丢失吗？</view>
+        <view class="a">不会。退出房间后您的余额会保留，您可以随时重新加入同一个房间继续记账。</view>
+      </view>
+      <view class="faq card">
+        <view class="q">房间多久会自动解散？</view>
+        <view class="a">如果房间2小时内没有任何操作（转账、加入、退出），系统会自动解散房间并保存记录。</view>
+      </view>
+      <view class="faq card">
+        <view class="q">金额有限制吗？</view>
+        <view class="a">单笔转账金额范围为 0.01 - 100000 元，支持最多两位小数。余额可以为负数，没有限制。</view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

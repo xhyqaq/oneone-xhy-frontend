@@ -1,0 +1,152 @@
+.settlement-scroll {
+  height: 100vh;
+}
+
+.top-green {
+  background: #05904d;
+  color: #ffffff;
+  padding: 48rpx 20rpx 20rpx;
+}
+
+.head-row {
+  display: flex;
+  align-items: center;
+}
+
+.back,
+.space {
+  width: 130rpx;
+  font-size: 30rpx;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.summary-grid {
+  margin-top: 16rpx;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12rpx;
+}
+
+.summary-item {
+  background: #09a05a;
+  border-radius: 18rpx;
+  text-align: center;
+  padding: 14rpx 6rpx;
+}
+
+.s-label {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.s-value {
+  margin-top: 6rpx;
+  font-size: 44rpx;
+  font-weight: 700;
+}
+
+.s-unit {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.section-title {
+  margin: 18rpx 20rpx;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.ranking-list {
+  padding: 0 20rpx;
+}
+
+.rank-card {
+  margin-bottom: 12rpx;
+  padding: 14rpx;
+}
+
+.rank-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rank-left {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.rank-index {
+  width: 26rpx;
+  color: #666666;
+  font-size: 26rpx;
+}
+
+.rank-avatar {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+  line-height: 68rpx;
+  text-align: center;
+  background: #05904d;
+  color: #ffffff;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.rank-name {
+  font-size: 34rpx;
+  font-weight: 600;
+}
+
+.rank-amount {
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.bar-bg {
+  margin-top: 10rpx;
+  height: 16rpx;
+  border-radius: 10rpx;
+  background: #ecece8;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 16rpx;
+  border-radius: 10rpx;
+}
+
+.bar-fill.positive {
+  background: #4eb47f;
+}
+
+.bar-fill.negative {
+  background: #de8484;
+}
+
+.bottom-space {
+  height: 150rpx;
+}
+
+.footer-btn {
+  position: fixed;
+  left: 20rpx;
+  right: 20rpx;
+  bottom: calc(16rpx + env(safe-area-inset-bottom));
+  height: 76rpx;
+  line-height: 76rpx;
+  text-align: center;
+  border-radius: 38rpx;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #ffffff;
+  background: #e50010;
+}

@@ -1,0 +1,39 @@
+<view class="screen history-screen">
+  <view class="green-head">
+    <view style="height: {{topInset}}px;"></view>
+    <view class="row">
+      <view class="back" bindtap="goBack">&lt; 返回</view>
+      <view class="title">历史记录</view>
+      <view class="space"></view>
+    </view>
+    <view class="stat-grid">
+      <view class="stat-item">
+        <view class="label">总盈利</view>
+        <view class="value positive">+345</view>
+      </view>
+      <view class="stat-item">
+        <view class="label">总亏损</view>
+        <view class="value">-350</view>
+      </view>
+      <view class="stat-item">
+        <view class="label">净盈亏</view>
+        <view class="value">-5</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="list-wrap">
+    <view class="history-card card" wx:for="{{rooms}}" wx:key="id">
+      <view class="symbol">#</view>
+      <view class="center">
+        <view class="name">{{item.id}} 房间 <text class="muted">👥{{item.members}}人</text></view>
+        <view class="meta-row">
+          <view class="meta">{{item.date}}</view>
+          <view class="meta">{{item.duration}}</view>
+          <view class="meta">{{item.rounds}}笔</view>
+        </view>
+      </view>
+      <view class="right {{item.cls}}">{{item.amount}} ></view>
+    </view>
+  </view>
+</view>

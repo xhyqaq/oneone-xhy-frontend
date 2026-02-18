@@ -1,0 +1,247 @@
+.home-screen {
+  position: relative;
+}
+
+.home-scroll {
+  height: 100vh;
+  padding: 20rpx 20rpx 0;
+  box-sizing: border-box;
+}
+
+.top-grab {
+  width: 180rpx;
+  height: 10rpx;
+  background: #d3d3cf;
+  border-radius: 999rpx;
+  margin: 6rpx auto 20rpx;
+}
+
+.hero {
+  margin: 12rpx 8rpx 16rpx;
+}
+
+.hero-title {
+  font-size: 48rpx;
+  font-weight: 700;
+}
+
+.hero-desc {
+  margin-top: 6rpx;
+  color: #6a6a6a;
+  font-size: 30rpx;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+}
+
+.action-card {
+  border-radius: 22rpx;
+  padding: 24rpx 18rpx;
+  border: 2rpx solid #e6e6e6;
+  background: #ffffff;
+}
+
+.action-card.create {
+  background: #05904d;
+  border: none;
+}
+
+.action-icon {
+  width: 84rpx;
+  height: 84rpx;
+  line-height: 84rpx;
+  text-align: center;
+  border-radius: 42rpx;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 54rpx;
+  margin-bottom: 16rpx;
+}
+
+.action-icon.light {
+  background: #e7f4ec;
+  color: #05904d;
+  font-size: 42rpx;
+}
+
+.action-title {
+  color: #ffffff;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.action-title.dark {
+  color: #1e1e1e;
+}
+
+.action-sub {
+  margin-top: 8rpx;
+  color: #d6f2e2;
+  font-size: 26rpx;
+}
+
+.join .action-sub {
+  color: #757575;
+}
+
+.join-bar {
+  margin-top: 16rpx;
+  padding: 14rpx;
+  display: flex;
+  gap: 12rpx;
+}
+
+.room-input {
+  flex: 1;
+  height: 70rpx;
+  line-height: 70rpx;
+  border-radius: 18rpx;
+  background: #efefec;
+  color: #666666;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+}
+
+.join-btn {
+  width: 138rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  border-radius: 18rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+  background: #91cfaf;
+}
+
+.tips {
+  margin-top: 16rpx;
+  padding: 18rpx;
+}
+
+.tips-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 8rpx;
+}
+
+.tips-tag {
+  padding: 8rpx 14rpx;
+  border-radius: 16rpx;
+  background: #f7ebd9;
+  color: #6f5943;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.tips-title {
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.tips-item {
+  margin-top: 8rpx;
+  color: #666666;
+  font-size: 28rpx;
+}
+
+.recent-title-row {
+  margin-top: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8rpx;
+}
+
+.recent-title {
+  font-size: 38rpx;
+  font-weight: 700;
+}
+
+.recent-more {
+  color: #099454;
+  font-size: 28rpx;
+}
+
+.recent-list {
+  margin-top: 12rpx;
+}
+
+.recent-card {
+  margin-bottom: 12rpx;
+  padding: 14rpx;
+  display: flex;
+  align-items: center;
+}
+
+.room-badge {
+  width: 66rpx;
+  height: 66rpx;
+  border-radius: 18rpx;
+  background: #efefec;
+  line-height: 66rpx;
+  text-align: center;
+  font-size: 42rpx;
+  color: #6f6f6f;
+}
+
+.room-info {
+  flex: 1;
+  margin-left: 14rpx;
+}
+
+.room-name {
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.room-meta {
+  margin-top: 6rpx;
+  color: #6d6d6d;
+  font-size: 26rpx;
+}
+
+.room-amount {
+  font-size: 38rpx;
+  font-weight: 700;
+}
+
+.bottom-placeholder {
+  height: 138rpx;
+}
+
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(98rpx + env(safe-area-inset-bottom));
+  padding: 10rpx 0 env(safe-area-inset-bottom);
+  background: #ffffff;
+  border-top: 2rpx solid #e8e8e5;
+  display: flex;
+}
+
+.nav-item {
+  flex: 1;
+  text-align: center;
+  color: #666666;
+}
+
+.nav-icon {
+  font-size: 40rpx;
+}
+
+.nav-text {
+  margin-top: 2rpx;
+  font-size: 24rpx;
+}
+
+.nav-item.active {
+  color: #05904d;
+  font-weight: 600;
+}

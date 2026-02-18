@@ -1,0 +1,88 @@
+<view class="screen profile-screen">
+  <scroll-view class="profile-scroll" scroll-y="true" show-scrollbar="false">
+    <view style="height: {{topInset}}px;"></view>
+    <view class="top-grab"></view>
+
+    <view class="user-row">
+      <view class="avatar">张</view>
+      <view class="user-info">
+        <view class="name">张三</view>
+        <view class="id">ID: wx_zhangsan_123</view>
+      </view>
+      <view class="setting">⚙</view>
+    </view>
+
+    <view class="card summary-card">
+      <view class="summary-head">🏆 累计战绩 <text class="positive">+270.00</text></view>
+      <view class="stat-grid">
+        <view class="stat-box">
+          <view class="num">28</view>
+          <view class="label">总局数</view>
+        </view>
+        <view class="stat-box">
+          <view class="num">57%</view>
+          <view class="label">胜率</view>
+        </view>
+        <view class="stat-box">
+          <view class="num positive">+1250</view>
+          <view class="label">总盈利</view>
+        </view>
+        <view class="stat-box">
+          <view class="num negative">-980</view>
+          <view class="label">总亏损</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card ratio-card">
+      <view class="ratio-head">
+        <view class="positive">赢 16局</view>
+        <view class="negative">输 12局</view>
+      </view>
+      <view class="ratio-bar">
+        <view class="win"></view>
+        <view class="lose"></view>
+      </view>
+    </view>
+
+    <view class="card menu-card">
+      <view class="menu-item" bindtap="goHistory">
+        <view class="menu-left">
+          <view class="menu-icon">📖</view>
+          <view>
+            <view class="menu-title">历史记录</view>
+            <view class="menu-sub">查看所有房间记录</view>
+          </view>
+        </view>
+        <view class="menu-arrow">></view>
+      </view>
+
+      <view class="divider"></view>
+
+      <view class="menu-item" bindtap="goManual">
+        <view class="menu-left">
+          <view class="menu-icon">?</view>
+          <view>
+            <view class="menu-title">使用手册</view>
+            <view class="menu-sub">如何使用打牌记账</view>
+          </view>
+        </view>
+        <view class="menu-arrow">></view>
+      </view>
+    </view>
+
+    <view class="version">打牌记账 v1.0.0</view>
+    <view class="bottom-space"></view>
+  </scroll-view>
+
+  <view class="bottom-nav">
+    <view class="nav-item" bindtap="goHome">
+      <view class="nav-icon">¤</view>
+      <view class="nav-text">记账</view>
+    </view>
+    <view class="nav-item active">
+      <view class="nav-icon">◌</view>
+      <view class="nav-text">我的</view>
+    </view>
+  </view>
+</view>

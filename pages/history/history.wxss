@@ -1,0 +1,101 @@
+.history-screen {
+  min-height: 100vh;
+}
+
+.green-head {
+  background: #05904d;
+  color: #ffffff;
+  padding: 48rpx 20rpx 20rpx;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.back,
+.space {
+  width: 130rpx;
+  font-size: 30rpx;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.stat-grid {
+  margin-top: 16rpx;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12rpx;
+}
+
+.stat-item {
+  background: #099b56;
+  border-radius: 18rpx;
+  text-align: center;
+  padding: 12rpx 6rpx;
+}
+
+.label {
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 24rpx;
+}
+
+.value {
+  margin-top: 4rpx;
+  font-size: 42rpx;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.list-wrap {
+  padding: 14rpx 20rpx 20rpx;
+}
+
+.history-card {
+  margin-bottom: 10rpx;
+  padding: 14rpx;
+  display: flex;
+  align-items: center;
+}
+
+.symbol {
+  width: 66rpx;
+  height: 66rpx;
+  border-radius: 16rpx;
+  text-align: center;
+  line-height: 66rpx;
+  background: #efefec;
+  color: #707070;
+  font-size: 40rpx;
+}
+
+.center {
+  flex: 1;
+  margin-left: 12rpx;
+}
+
+.name {
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.meta-row {
+  margin-top: 6rpx;
+  display: flex;
+  gap: 14rpx;
+}
+
+.meta {
+  color: #666666;
+  font-size: 24rpx;
+}
+
+.right {
+  font-size: 36rpx;
+  font-weight: 700;
+}

@@ -1,0 +1,114 @@
+.manual-scroll {
+  height: 100vh;
+}
+
+.green-head {
+  background: #05904d;
+  color: #ffffff;
+  padding: 48rpx 20rpx 18rpx;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.back,
+.space {
+  width: 130rpx;
+  font-size: 30rpx;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.section-title {
+  margin: 18rpx 20rpx;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.step-list,
+.faq-list {
+  padding: 0 20rpx;
+}
+
+.step-card {
+  margin-bottom: 10rpx;
+  padding: 14rpx;
+  position: relative;
+}
+
+.step-head {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.icon {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  line-height: 48rpx;
+  text-align: center;
+  font-size: 26rpx;
+}
+
+.icon-green {
+  color: #0a9b58;
+  background: #e7f4ec;
+}
+
+.icon-orange {
+  color: #df7d40;
+  background: #fdf0e7;
+}
+
+.icon-blue {
+  color: #4b8fd2;
+  background: #eaf2fc;
+}
+
+.icon-purple {
+  color: #c361ba;
+  background: #f7ebf8;
+}
+
+.step-title {
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.step-desc {
+  margin-top: 8rpx;
+  color: #555555;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.step-no {
+  margin-top: 8rpx;
+  color: #666666;
+  font-size: 24rpx;
+}
+
+.faq {
+  margin-bottom: 10rpx;
+  padding: 14rpx;
+}
+
+.q {
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.a {
+  margin-top: 6rpx;
+  color: #555555;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
