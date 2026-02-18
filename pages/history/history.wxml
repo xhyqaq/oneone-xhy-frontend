@@ -9,21 +9,21 @@
     <view class="stat-grid">
       <view class="stat-item">
         <view class="label">总盈利</view>
-        <view class="value positive">+345</view>
+        <view class="value positive">{{totalProfit}}</view>
       </view>
       <view class="stat-item">
         <view class="label">总亏损</view>
-        <view class="value">-350</view>
+        <view class="value">{{totalLoss}}</view>
       </view>
       <view class="stat-item">
         <view class="label">净盈亏</view>
-        <view class="value">-5</view>
+        <view class="value">{{netProfit}}</view>
       </view>
     </view>
   </view>
 
   <view class="list-wrap">
-    <view class="history-card card" wx:for="{{rooms}}" wx:key="id">
+    <view class="history-card card" wx:for="{{rooms}}" wx:key="roomId" bindtap="goRoomDetail" data-room-id="{{item.roomId}}" data-room-code="{{item.id}}">
       <view class="symbol">#</view>
       <view class="center">
         <view class="name">{{item.id}} 房间 <text class="muted">👥{{item.members}}人</text></view>

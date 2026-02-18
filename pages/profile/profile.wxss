@@ -27,6 +27,12 @@
   line-height: 86rpx;
   font-size: 46rpx;
   font-weight: 700;
+  overflow: hidden;
+}
+
+.avatar-img {
+  width: 86rpx;
+  height: 86rpx;
 }
 
 .user-info {

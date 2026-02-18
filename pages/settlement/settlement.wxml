@@ -37,5 +37,5 @@
     <view class="bottom-space"></view>
   </scroll-view>
 
-  <view class="footer-btn">最终结算（结束并解散房间）</view>
+  <view class="footer-btn" bindtap="finalSettlement">最终结算（结束并解散房间）</view>
 </view>

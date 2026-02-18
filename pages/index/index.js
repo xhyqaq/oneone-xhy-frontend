@@ -1,26 +1,31 @@
+const api = require('../../utils/api')
+
+function formatAmount(value) {
+  const num = Number(value || 0)
+  const sign = num >= 0 ? '+' : '-'
+  return `${sign}${Math.abs(num).toFixed(2)}`
+}
+
+function toRecentRoom(item) {
+  return {
+    id: item.roomCode,
+    roomId: item.roomId,
+    members: item.memberCount,
+    date: (item.endedAt || item.createdAt || '').slice(5, 10).replace('-', '/'),
+    rounds: item.transactionCount,
+    amount: formatAmount(item.myBalance),
+    cls: Number(item.myBalance) >= 0 ? 'positive' : 'negative'
+  }
+}
+
 Page({
   data: {
     topInset: 28,
     showJoinInput: false,
     roomCode: '',
-    recentRooms: [
-      {
-        id: 'a3kf',
-        members: 4,
-        date: '02/17',
-        rounds: 18,
-        amount: '+280.00',
-        cls: 'positive'
-      },
-      {
-        id: '7vcf',
-        members: 5,
-        date: '02/15',
-        rounds: 12,
-        amount: '-150.00',
-        cls: 'negative'
-      }
-    ]
+    creatingRoom: false,
+    joiningRoom: false,
+    recentRooms: []
   },
 
   onLoad() {
@@ -31,10 +36,42 @@ Page({
     })
   },
 
-  goRoom() {
-    wx.navigateTo({
-      url: '/pages/room/room'
-    })
+  onShow() {
+    this.fetchRecentRooms()
+  },
+
+  async fetchRecentRooms() {
+    try {
+      const data = await api.getHistoryRooms(1, 5)
+      const rooms = (data.rooms || []).map(toRecentRoom)
+      this.setData({
+        recentRooms: rooms
+      })
+    } catch (err) {
+      this.setData({
+        recentRooms: []
+      })
+    }
+  },
+
+  async goRoom() {
+    if (this.data.creatingRoom) {
+      return
+    }
+    this.setData({ creatingRoom: true })
+    try {
+      const data = await api.createRoom()
+      wx.navigateTo({
+        url: `/pages/room/room?roomId=${encodeURIComponent(data.roomId)}&roomCode=${encodeURIComponent(data.roomCode)}`
+      })
+    } catch (err) {
+      wx.showToast({
+        title: err.message || '创建房间失败',
+        icon: 'none'
+      })
+    } finally {
+      this.setData({ creatingRoom: false })
+    }
   },
 
   goHistory() {
@@ -49,9 +86,14 @@ Page({
     })
   },
 
-  goRoomFromRecent() {
+  goRoomFromRecent(e) {
+    const roomId = e.currentTarget.dataset.roomId
+    const roomCode = e.currentTarget.dataset.roomCode
+    if (!roomId) {
+      return
+    }
     wx.navigateTo({
-      url: '/pages/room/room'
+      url: `/pages/room/room?roomId=${encodeURIComponent(roomId)}&roomCode=${encodeURIComponent(roomCode || '')}`
     })
   },
 
@@ -63,11 +105,14 @@ Page({
 
   onRoomCodeInput(e) {
     this.setData({
-      roomCode: (e.detail.value || '').trim()
+      roomCode: (e.detail.value || '').trim().slice(0, 4)
     })
   },
 
-  joinByCode() {
+  async joinByCode() {
+    if (this.data.joiningRoom) {
+      return
+    }
     const code = this.data.roomCode
     if (code.length !== 4) {
       wx.showToast({
@@ -77,8 +122,19 @@ Page({
       return
     }
 
-    wx.navigateTo({
-      url: '/pages/room/room'
-    })
+    this.setData({ joiningRoom: true })
+    try {
+      const data = await api.joinRoom(code)
+      wx.navigateTo({
+        url: `/pages/room/room?roomId=${encodeURIComponent(data.roomId)}&roomCode=${encodeURIComponent(data.roomCode || code)}`
+      })
+    } catch (err) {
+      wx.showToast({
+        title: err.message || '加入房间失败',
+        icon: 'none'
+      })
+    } finally {
+      this.setData({ joiningRoom: false })
+    }
   }
 })

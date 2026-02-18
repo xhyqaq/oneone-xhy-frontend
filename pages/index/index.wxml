@@ -43,7 +43,7 @@
     </view>
 
     <view class="recent-list">
-      <view class="recent-card card" wx:for="{{recentRooms}}" wx:key="id" bindtap="goRoomFromRecent">
+      <view class="recent-card card" wx:for="{{recentRooms}}" wx:key="id" bindtap="goRoomFromRecent" data-room-id="{{item.roomId}}" data-room-code="{{item.id}}">
         <view class="room-badge">#</view>
         <view class="room-info">
           <view class="room-name">{{item.id}} 房间 <text class="muted">👥{{item.members}}人</text></view>

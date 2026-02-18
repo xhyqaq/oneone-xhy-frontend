@@ -5,8 +5,8 @@
       <view class="header-row">
         <view class="back" bindtap="goBack">&lt; 返回</view>
         <view class="title-wrap">
-          <view class="title">7vcf 房间</view>
-          <view class="sub">5位成员</view>
+          <view class="title">{{roomCode}} 房间</view>
+          <view class="sub">{{memberCount}}位成员</view>
         </view>
         <view class="actions">
           <view class="icon" bindtap="openRoomQr">▦</view>
@@ -17,7 +17,7 @@
       <view class="my-balance">
         <view>
           <view class="small">我的余额</view>
-          <view class="amount">+150.00<text class="yuan">元</text></view>
+          <view class="amount {{myBalanceCls}}">{{myBalance}}<text class="yuan">元</text></view>
         </view>
         <view class="settle-btn" bindtap="goSettlement">结算</view>
       </view>
@@ -42,7 +42,7 @@
 
     <view class="section-head">
       <view class="section-title">流水记录</view>
-      <view class="section-count">共 8 笔</view>
+      <view class="section-count">共 {{records.length}} 笔</view>
     </view>
 
     <view class="record-list">
@@ -65,7 +65,7 @@
   <view class="qr-mask" wx:if="{{showQrPopup}}" bindtap="closeRoomQr">
     <view class="qr-dialog" catchtap="onQrDialogTap">
       <view class="qr-title">房间二维码</view>
-      <view class="qr-sub">扫码加入 {{roomId}} 房间</view>
+      <view class="qr-sub">扫码加入 {{roomCode}} 房间</view>
       <view class="qr-board">
         <view class="qr-fake"></view>
       </view>
