@@ -46,7 +46,7 @@ Page({
   },
 
   async openProfileActions() {
-    const itemList = ['同步微信头像昵称', '修改昵称']
+    const itemList = ['修改昵称']
     try {
       const res = await new Promise((resolve, reject) => {
         wx.showActionSheet({
@@ -57,12 +57,6 @@ Page({
       })
 
       if (res.tapIndex === 0) {
-        await getApp().syncUserProfileFromWechat()
-        this.syncUserBasic()
-        return
-      }
-
-      if (res.tapIndex === 1) {
         this.editNickname()
       }
     } catch (err) {

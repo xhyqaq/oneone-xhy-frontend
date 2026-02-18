@@ -1,11 +1,10 @@
 App({
   async onLaunch() {
     await this.ensureLogin()
-    await this.syncUserProfileFromWechat().catch(() => {})
   },
 
   async onShow() {
-    await this.syncUserProfileFromWechat().catch(() => {})
+    await this.ensureLogin()
   },
 
   async ensureLogin() {
@@ -61,70 +60,9 @@ App({
     return body.data.token
   },
 
-  async syncUserProfileFromWechat() {
-    if (this.globalData.profileSyncing) {
-      return
-    }
-
-    const currentUser = this.globalData.user || wx.getStorageSync('user') || {}
-    if (currentUser.avatarUrl && currentUser.nickname && currentUser.nickname !== '微信用户') {
-      return
-    }
-
-    this.globalData.profileSyncing = true
-    try {
-      const profileRes = await new Promise((resolve, reject) => {
-        wx.getUserProfile({
-          desc: '用于完善头像和昵称',
-          success: resolve,
-          fail: reject
-        })
-      })
-
-      const userInfo = profileRes.userInfo || {}
-      if (!userInfo.nickName || !userInfo.avatarUrl) {
-        return
-      }
-
-      await this.ensureLogin()
-      const apiRes = await new Promise((resolve, reject) => {
-        wx.request({
-          url: `${this.globalData.baseUrl}/auth/profile`,
-          method: 'PUT',
-          header: {
-            'content-type': 'application/json',
-            Authorization: `Bearer ${this.globalData.token}`
-          },
-          data: {
-            nickname: userInfo.nickName,
-            avatarUrl: userInfo.avatarUrl
-          },
-          success: resolve,
-          fail: reject
-        })
-      })
-
-      const body = apiRes.data || {}
-      if (body.code !== 0) {
-        throw new Error(body.message || '更新资料失败')
-      }
-
-      const nextUser = {
-        ...(this.globalData.user || {}),
-        nickname: userInfo.nickName,
-        avatarUrl: userInfo.avatarUrl
-      }
-      this.globalData.user = nextUser
-      wx.setStorageSync('user', nextUser)
-    } finally {
-      this.globalData.profileSyncing = false
-    }
-  },
-
   globalData: {
     baseUrl: 'https://6255b761.r2.cpolar.top/api',
     token: '',
-    user: null,
-    profileSyncing: false
+    user: null
   }
 })
