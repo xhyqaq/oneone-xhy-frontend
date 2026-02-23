@@ -179,35 +179,80 @@ Page({
     const token = app.globalData.token || ''
     const url = `${app.globalData.baseUrl}/rooms/${this.data.roomId}/qrcode`
 
+    console.log('[InviteQR] start', {
+      roomId: this.data.roomId,
+      hasToken: Boolean(token),
+      url
+    })
+
     this.setData({
       showQrPopup: true,
       qrCodeUrl: ''
     })
 
-    wx.downloadFile({
-      url: url,
-      header: {
-        Authorization: `Bearer ${token}`
-      },
-      success: (res) => {
-        if (res.statusCode === 200) {
-          this.setData({
-            qrCodeUrl: res.tempFilePath
+    const startDownload = (authToken) => {
+      console.log('[InviteQR] download begin', { hasToken: Boolean(authToken) })
+      wx.downloadFile({
+        url: url,
+        header: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+        success: (res) => {
+          const headers = res.header || {}
+          const contentType = headers['content-type'] || headers['Content-Type'] || ''
+          console.log('[InviteQR] download success', {
+            statusCode: res.statusCode,
+            contentType,
+            tempFilePath: res.tempFilePath || ''
           })
-        } else {
+          if (res.statusCode === 200 && contentType.indexOf('image/') === 0) {
+            this.setData({
+              qrCodeUrl: res.tempFilePath
+            })
+            return
+          }
+
+          const fs = wx.getFileSystemManager()
+          fs.readFile({
+            filePath: res.tempFilePath,
+            encoding: 'utf8',
+            success: (fileRes) => {
+              let errMsg = '加载二维码失败'
+              try {
+                const body = JSON.parse(fileRes.data || '{}')
+                console.error('[InviteQR] non-image response body', body)
+                if (body && body.message) {
+                  errMsg = body.message
+                }
+              } catch (e) {
+                console.error('[InviteQR] parse non-image body failed', e)
+              }
+              wx.showToast({ title: errMsg, icon: 'none' })
+            },
+            fail: (err) => {
+              console.error('[InviteQR] read temp file failed', err)
+              wx.showToast({ title: '加载二维码失败', icon: 'none' })
+            }
+          })
+        },
+        fail: (err) => {
+          console.error('[InviteQR] download failed', err)
           wx.showToast({
             title: '加载二维码失败',
             icon: 'none'
           })
         }
-      },
-      fail: () => {
-        wx.showToast({
-          title: '加载二维码失败',
-          icon: 'none'
-        })
-      }
-    })
+      })
+    }
+
+    if (!token && typeof app.ensureLogin === 'function') {
+      console.log('[InviteQR] no token, try relogin before download')
+      app.ensureLogin(function() {
+        console.log('[InviteQR] relogin done', { hasToken: Boolean(app.globalData.token) })
+        startDownload(app.globalData.token || '')
+      })
+      return
+    }
+
+    startDownload(token)
   },
 
   closeRoomQr() {
